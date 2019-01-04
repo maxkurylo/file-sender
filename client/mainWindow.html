@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>File Sender</title>
+
+    <style>
+        body {
+            font-family: helvetica;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        #drag-file {
+            background-color: #bbb;
+            text-align: center;
+            width: 300px;
+            height: 300px;
+            padding: 30px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Отправьте файлы Максону</h1>
+
+    <div id="drag-file">
+        <p>Drag your files here</p>
+    </div>
+
+    <script>
+
+        const electron = require("electron");
+        const { ipcRenderer } = electron;
+
+        var holder = document.getElementById('drag-file');
+
+        holder.ondragover = () => {
+            holder.style.backgroundColor = "rgb(78, 147, 236)";
+            return false;
+        };
+
+        holder.ondragleave = () => {
+            holder.style.backgroundColor = "#bbb";
+            return false;
+        };
+
+        holder.ondragend = () => {
+            holder.style.backgroundColor = "#bbb";
+            return false;
+        };
+
+        holder.ondrop = (e) => {
+            e.preventDefault();
+            holder.style.backgroundColor = "#bbb";
+            for (let file of e.dataTransfer.files) {
+                const fileInfo = {
+                    lastModified: file["lastModified"],
+                    name: file["name"],
+                    path: file["path"],
+                    size: file["size"],
+                    type: file["type"]
+                }
+                console.log(file);
+                ipcRenderer.send('file:selected', fileInfo);
+                break;
+            }
+            return false;
+        };
+    </script>
+</body>
+
+</html>

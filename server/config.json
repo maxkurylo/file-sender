@@ -1,0 +1,10 @@
+{
+  "database": {
+    "host": "localhost:8889",
+    "db_name": "worktime",
+    "user": "root",
+    "password": "root",
+    "users_table": "users",
+    "devices_table": "devices"
+  }
+}
