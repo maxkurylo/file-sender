@@ -15,7 +15,19 @@ var filePath = "";
 
 app.on("ready", function () {
     mainWindow = new BrowserWindow({});
-    mainWindow.loadFile('mainWindow.html');
+    mainWindow.loadFile('ui/default.html');
+});
+
+ipcMain.on('main-page:load', (event) => {
+    mainWindow.loadFile('ui/main.html');
+});
+
+ipcMain.on('sign-in-page:load', (event, data) => {
+    mainWindow.loadFile('ui/signIn.html');
+});
+
+ipcMain.on('register:conformation', (event, data) => {
+    mainWindow.loadFile('ui/registerConformation.html');
 });
 
 ipcMain.on('file:selected', (event, fileInfo) => {

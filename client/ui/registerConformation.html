@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>File Sender - Register</title>
+</head>
+
+<body>
+
+    <h3>Create new user?</h3>
+    <p>User login you have entered is not found</p>
+
+    <form id="register-form">
+        <input type="hidden" name="user_login" value="popkin@gmail.com">
+        <input type="hidden" name="user_password" value="12345678">
+    </form>
+
+    <button id="register-user">Create</button>
+    <button id="sign-in">Try another login</button>
+
+    <script>
+
+        const electron = require("electron");
+        const { ipcRenderer } = electron;
+
+        let registerButton = document.getElementById("register-user");
+        let signInButton = document.getElementById("sign-in");
+
+        registerButton.onclick = async function () {
+            const form = document.getElementById("register-form");
+            const formData = new FormData(form);
+            const options = {
+                "method": "POST",
+                "credentials": "include",
+                "body": formData
+            }
+
+            const promise = await fetch("http://localhost:8888/worktime/server/register.php", options)
+                .then(resp => resp.json())
+                .then((resp) => {
+                    if (resp["registered"]) {
+                        ipcRenderer.send('mainPage:load', "");
+                    }
+                })
+                .catch(console.error);
+        }
+
+        signInButton.onclick = function () {
+            ipcRenderer.send('sign-in-page:load', "");
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>File Sender - Connecting</title>
+    <script type="text/javascript" src="scripts/serverConnection.js"></script>
+</head>
+
+<body>
+
+    <img src="img/loading.gif" alt="Connecting...">
+    <button id="loadSignInPage">Sign In</button>
+
+    <script>
+        const electron = require("electron");
+        const { ipcRenderer } = electron;
+
+        //let button = document.getElementById("loadSignInPage");
+        //button.onclick = function () {
+        ipcRenderer.send('sign-in-page:load', "");
+        //}
+
+    </script>
+
+</body>
+
+</html>

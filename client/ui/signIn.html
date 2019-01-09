@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>Sign in Client</title>
+    <title>File Sender - Sign In</title>
     <style>
         body {
             text-align: center;
@@ -19,12 +20,10 @@
         }
     </style>
 </head>
+
 <body>
     <h1>Sign in or create account</h1>
-    <form 
-   
-    id="user-signin-form"
-    >
+    <form id="user-signin-form">
         <label for="user_login">Login</label>
         <input type="email" name="user_login" id="user_login" placeholder="example@mail.com" value="testuser@gmail.com">
 
@@ -35,6 +34,10 @@
     </form>
 
     <script>
+
+        const electron = require("electron");
+        const { ipcRenderer } = electron;
+
         let form = document.getElementById("user-signin-form");
         form.onsubmit = formSubmit;
 
@@ -47,11 +50,22 @@
                 "body": formData
             }
 
-            const promise = await fetch("server/signin.php", options)
-            .then( resp => resp.json() )
-            .then( console.log )
-            .catch ( console.error );
+            const promise = await fetch("http://localhost:8888/worktime/server/signin.php", options)
+                .then(resp => resp.json())
+                .then(resp => {
+                    if (resp["registerRequired"]) {
+                        ipcRenderer.send('register:conformation', "");
+                    }
+                    else if (resp["signedIn"]) {
+                        ipcRenderer.send('mainPage:load');
+                    }
+                    else {
+                        console.log(resp);
+                    }
+                })
+                .catch(console.error);
         }
     </script>
 </body>
+
 </html>
